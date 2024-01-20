@@ -58,7 +58,7 @@ while run:
 
     if (b.x-a.x)>0:
         b_inst_acc_x = - b_inst_acc_x
-        b_inst_acc_y = - b_inst_acc_y`  `
+        b_inst_acc_y = - b_inst_acc_y
     elif (b.x-a.x)<0:
         a_inst_acc_x = -a_inst_acc_x
 
