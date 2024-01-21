@@ -4,7 +4,7 @@ import math
 
 pygame.init()
 clock = pygame.time.Clock()
-win = pygame.display.set_mode((1500, 1000))
+win = pygame.display.set_mode((1000, 1000))
 pygame.display.set_caption("Interacting Gravitational Objects")
 
 class object():
@@ -62,6 +62,13 @@ while run:
     elif (b.x-a.x)<0:
         a_inst_acc_x = -a_inst_acc_x
         a_inst_acc_y = -a_inst_acc_y
+    elif (b.x-a.x) == 0:
+        if b.y > a.y:
+            b_inst_acc_x = - b_inst_acc_x
+            b_inst_acc_y = - b_inst_acc_y
+        else:
+            a_inst_acc_x = -a_inst_acc_x
+            a_inst_acc_y = -a_inst_acc_y
 
 
     a.vel_x += a_inst_acc_x * dt
@@ -88,7 +95,7 @@ while run:
     pygame.display.update()
     clock.tick(240)
 
-#FIX Y ISSUE - same y coords repel for some reason.
+#FIX Y ISSUE - same y coords repel for some reason. CHANGE b.x-a.x condition with inequalities instead of ==
     
 #Old code for nostalgia
 '''

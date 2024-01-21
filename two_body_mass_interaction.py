@@ -2,7 +2,7 @@ import pygame
 import pygame.gfxdraw
 import math
 
-win_x = 1000
+win_x = 1500
 win_y = 1000
 
 pygame.init()
@@ -31,22 +31,23 @@ dt = 1/60
 #a = object(50000, 10, 500, 500, 0, 0)
 #b = object(10000, 10, 600, 500, 0, 20)
 
-a = object(10000, 10, 400, 400, 5, 5)
-b = object(10000, 10, 600, 600, 0, -5)
+a = object(100000, 10, 550, 500, 0, 0)
+b = object(10000, 10, 850, 500, 0, 20)
 pixel_coords_a = []
 pixel_coords_b = []
+
 masslets_a_list=[]
 masslets_b_list=[]
 
 
-r = 100
+r = 75
 for i in range(win_x):
     for j in range(win_y):
-        if (((i-a.x)**2 + (j-a.y)**2) <= r**2 and ((i-a.x)**2 + (j-a.y)**2) >= a.radius**2) and (((i-j) %10) + ((i+j) % 10)) == 0:
+        if (((i-a.x)**2 + (j-a.y)**2) <= r**2 and ((i-a.x)**2 + (j-a.y)**2) >= a.radius**2) and (((i-j) %10) + ((i+j) % 3)) == 0:
             masslets_a_list.append(masslets(i, j, a.vel_x, a.vel_y))
-        elif (((i-b.x)**2 + (j-b.y)**2) <= r**2 and ((i-b.x)**2 + (j-b.y)**2) >= b.radius**2) and (((i-j) % 10) + ((i+j) % 10)) == 0:
+        elif (((i-b.x)**2 + (j-b.y)**2) <= r**2 and ((i-b.x)**2 + (j-b.y)**2) >= b.radius**2) and (((i-j) % 10) + ((i+j) % 3)) == 0:
             masslets_b_list.append(masslets(i, j, b.vel_x, b.vel_y))
-         
+print(len(masslets_a_list), len(masslets_b_list))
 
 run = True
 counter = 0
@@ -84,7 +85,13 @@ while run:
     elif (b.x-a.x)<0:
         a_inst_acc_x = -a_inst_acc_x
         a_inst_acc_y = -a_inst_acc_y
-
+    elif (b.x-a.x) == 0:
+        if b.y > a.y:
+            b_inst_acc_x = - b_inst_acc_x
+            b_inst_acc_y = - b_inst_acc_y
+        else:
+            a_inst_acc_x = -a_inst_acc_x
+            a_inst_acc_y = -a_inst_acc_y
 
     a.vel_x += a_inst_acc_x * dt
     a.vel_y += a_inst_acc_y * dt 
@@ -111,6 +118,10 @@ while run:
         if (b.x- masslets_a_list[i].x) < 0:
             masslet_a_x_acceleration = -masslet_a_x_acceleration
             masslet_a_y_acceleration = -masslet_a_y_acceleration
+        elif (b.x- masslets_a_list[i].x) == 0:
+            if b.y < masslets_a_list[i].x:
+                masslet_a_x_acceleration = -masslet_a_x_acceleration
+                masslet_a_y_acceleration = -masslet_a_y_acceleration
 
         masslets_a_list[i].vel_x += masslet_a_x_acceleration * dt
         masslets_a_list[i].vel_y += masslet_a_y_acceleration * dt
@@ -120,11 +131,16 @@ while run:
         if (a.x - masslets_b_list[i].x) == 0:
             theta = 3.14159265358979323846264338327950/2
         else:
-            theta = math.atan((a.y- masslets_a_list[i].y)/(a.x- masslets_b_list[i].x))
+            theta = math.atan((a.y- masslets_b_list[i].y)/(a.x- masslets_b_list[i].x))
         masslet_b_x_acceleration, masslet_b_y_acceleration = (a.mass / ((a.y-masslets_b_list[i].y)**2 + (a.x-masslets_b_list[i].x)**2)) * math.cos(theta), (a.mass / ((a.y-masslets_b_list[i].y)**2 + (a.x-masslets_b_list[i].x)**2)) * math.sin(theta)
         if (a.x- masslets_b_list[i].x) < 0:
             masslet_b_x_acceleration = -masslet_b_x_acceleration
             masslet_b_y_acceleration = -masslet_b_y_acceleration
+        elif (a.x- masslets_b_list[i].x) == 0:
+            if a.y < masslets_b_list[i].x:
+                masslet_b_x_acceleration = -masslet_b_x_acceleration
+                masslet_b_y_acceleration = -masslet_b_y_acceleration
+
         masslets_b_list[i].vel_x += masslet_b_x_acceleration * dt
         masslets_b_list[i].vel_y += masslet_b_y_acceleration * dt
         masslets_b_list[i].x += masslets_b_list[i].vel_x * dt
