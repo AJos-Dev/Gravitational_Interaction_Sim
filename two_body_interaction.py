@@ -21,8 +21,8 @@ dt = 1/60
 #a = object(50000, 10, 500, 500, 0, 0)
 #b = object(10000, 10, 600, 500, 0, 20)
 
-a = object(50000, 10, 500, 500, 10, 0)
-b = object(10000, 10, 600, 600, -10, 10)
+a = object(10000, 10, 500, 400, 0, 0)
+b = object(10000, 10, 500, 500, 0, 0)
 pixel_coords_a = []
 pixel_coords_b = []
 
@@ -61,7 +61,6 @@ while run:
         b_inst_acc_y = - b_inst_acc_y
     elif (b.x-a.x)<0:
         a_inst_acc_x = -a_inst_acc_x
-
         a_inst_acc_y = -a_inst_acc_y
 
 
@@ -89,7 +88,7 @@ while run:
     pygame.display.update()
     clock.tick(240)
 
-#WORKS!
+#FIX Y ISSUE - same y coords repel for some reason.
     
 #Old code for nostalgia
 '''
